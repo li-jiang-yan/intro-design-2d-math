@@ -1,0 +1,75 @@
+for (x_hp in 1:70){
+	# initialization
+	# record
+	record_vector <- c(0, 0, 0)
+	# each game
+	while (record_vector[1] < 10000){
+		# game initialization
+		# board
+		board_vector <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+		# players
+		x_vector <- c(x_hp, 8, 1)
+		y1_vector <- c(10, 1, 1)
+		y2_vector <- c(10, 1, 1)
+		y3_vector <- c(10, 1, 1)
+		y4_vector <- c(10, 1, 1)
+		player_vector <- c("health", "position", "status")
+		names(x_vector) <- player_vector
+		names(y1_vector) <- player_vector
+		names(y2_vector) <- player_vector
+		names(y3_vector) <- player_vector
+		names(y4_vector) <- player_vector
+		win_vector <- c("none")
+		# each round of each game
+		while (win_vector == c("none")){
+			# player x moves if alive
+			if (x_vector["health"] > 0){
+				dis_x <- sample(1:6, 1)
+				if (x_vector["position"] + dis_x > 24){x_vector["position"] <- ((x_vector["position"] + dis_x)%%24)} else {x_vector["position"] <- x_vector["position"] + dis_x}
+				if (board_vector[x_vector["position"]] == 2){x_vector["health"] <- x_vector["health"] - 2}
+				if (x_vector["health"] <= 0){x_vector["status"] <- 0}
+				if (x_vector["health"] > 0){board_vector[x_vector["position"]] <- 1}
+				if (x_vector["status"] == 0){win_vector <- c("y")}
+			}
+			# player y1 moves if alive
+			if (y1_vector["health"] > 0){
+				dis_y1 <- sample(1:6, 1)
+				if (y1_vector["position"] + dis_y1 > 24){y1_vector["position"] <- ((y1_vector["position"] + dis_y1)%%24)} else {y1_vector["position"] <- y1_vector["position"] + dis_y1}
+				if (board_vector[y1_vector["position"]] == 1){y1_vector["health"] <- y1_vector["health"] - 2}	
+				if (y1_vector["health"] <= 0){y1_vector["status"] <- 0}
+				if (y1_vector["health"] > 0){board_vector[y1_vector["position"]] <- 2}
+				if (y1_vector["status"] == 0){win_vector <- c("x")}
+			}
+			# player y2 moves if alive
+			if (y2_vector["health"] > 0){
+				dis_y2 <- sample(1:6, 1)
+				if (y2_vector["position"] + dis_y2 > 24){y2_vector["position"] <- ((y2_vector["position"] + dis_y2)%%24)} else {y2_vector["position"] <- y2_vector["position"] + dis_y2}
+				if (board_vector[y2_vector["position"]] == 1){y2_vector["health"] <- y2_vector["health"] - 2}
+				if (y2_vector["health"] <= 0){y2_vector["status"] <- 0}
+				if (y2_vector["health"] > 0){board_vector[y2_vector["position"]] <- 2}
+				if (y1_vector["status"] == 0 & y2_vector["status"] == 0){win_vector <- c("x")}
+			}
+			# player y3 moves if alive
+			if (y3_vector["health"] > 0){
+				dis_y3 <- sample(1:6, 1)
+				if (y3_vector["position"] + dis_y3 > 24){y3_vector["position"] <- ((y3_vector["position"] + dis_y3)%%24)} else {y3_vector["position"] <- y3_vector["position"] + dis_y3}
+				if (board_vector[y3_vector["position"]] == 1){y3_vector["health"] <- y3_vector["health"] - 2}
+				if (y3_vector["health"] <= 0){y3_vector["status"] <- 0}
+				if (y3_vector["health"] > 0){board_vector[y3_vector["position"]] <- 2}
+				if (y2_vector["status"] == 0 & y1_vector["status"] == 0 & y3_vector["status"] == 0){win_vector <- c("x")}
+			}
+				# player y4 moves if alive
+			if (y4_vector["health"] > 0){
+				dis_y4 <- sample(1:6, 1)
+				if (y4_vector["position"] + dis_y4 > 24){y4_vector["position"] <- ((y4_vector["position"] + dis_y4)%%24)} else {y4_vector["position"] <- y4_vector["position"] + dis_y4}
+				if (board_vector[y4_vector["position"]] == 1){y4_vector["health"] <- y4_vector["health"] - 2}
+				if (y4_vector["health"] <= 0){y4_vector["status"] <- 0}
+				if (y4_vector["health"] > 0){board_vector[y4_vector["position"]] <- 2}
+				if (y2_vector["status"] == 0 & y1_vector["status"] == 0 & y3_vector["status"] == 0 & y4_vector["status"] == 0){win_vector <- c("x")}
+			}
+		}
+		if (win_vector == c("x")){record_vector <- record_vector + c(1, 1, 0)} else {record_vector <- record_vector + c(1, 0, 1)}
+	}
+	each_hp_vector <- cbind(x_hp, record_vector[2])
+	print(paste(each_hp_vector))
+}
